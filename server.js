@@ -4,7 +4,6 @@ const playground = require('./graphql/playground');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
 const fhirAPI = require('./graphql/fhirApi');
-const ParseDateDirective = require('./graphql/dateParseDirective');
 const corsOptions = { credentials: true };
 
 const app = new koa();
@@ -20,9 +19,6 @@ const server = new ApolloServer({
     dataSources: () => ({
         fhirAPI: new fhirAPI(),
     }),
-    schemaDirectives: {
-        parseDate: ParseDateDirective,
-    },
 });
 
 server.applyMiddleware({

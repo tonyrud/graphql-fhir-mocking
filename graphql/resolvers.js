@@ -9,9 +9,13 @@ const resolvers = {
             parsed ? parseDate(lastUpdated, parsed) : lastUpdated,
     },
     Name: {
-        full: patientData => {
-            console.log('patientData', patientData);
+        full: (patientData, { reverse }) => {
             const { first, last, suffix } = patientData;
+
+            if (reverse) {
+                return `${last}, ${first}`;
+            }
+
             return `${first} ${last}${suffix ? ' ' + suffix : ''}`;
         },
     },

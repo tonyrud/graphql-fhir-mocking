@@ -20,7 +20,7 @@ const typeDefs = gql`
     type Name {
         first: String
         last: String
-        full: String
+        full(reverse: Boolean): String
         given: String @deprecated(reason: "changed to 'last'")
     }
 

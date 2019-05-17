@@ -29,10 +29,15 @@ class fhirApi extends RESTDataSource {
             telecom,
         } = patientResource;
 
-        const workPhone =
-            telecom && telecom.find(number => number.use === 'work');
-        const homePhone =
-            telecom && telecom.find(number => number.use === 'home');
+        const findNumber = key => {
+            const hasPatientNumber =
+                telecom && telecom.find(number => number.use === key);
+
+            return hasPatientNumber && hasPatientNumber.value;
+        };
+
+        const workPhone = findNumber('work') || 'No business phone';
+        const homePhone = findNumber('home') || 'No home phone';
 
         return {
             id,
@@ -42,8 +47,8 @@ class fhirApi extends RESTDataSource {
                 suffix: name && name[0].suffix && name[0].suffix[0],
             },
             phone: {
-                work: (workPhone && workPhone.value) || 'No business phone',
-                home: (homePhone && homePhone.value) || 'No home phone',
+                work: workPhone,
+                home: homePhone,
             },
             gender,
             lastUpdated,
