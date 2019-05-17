@@ -3,9 +3,14 @@ const { gql } = require('apollo-server');
 const typeDefs = gql`
     scalar DateTime
 
-    enum DateParsing {
+    enum DateStringParsing {
         STRING
         COUNT
+    }
+
+    enum DateCount {
+        AS_YEARS
+        AS_DAYS
     }
 
     type Patient {
@@ -14,7 +19,20 @@ const typeDefs = gql`
         gender: String
         birthDate: DateTime
         phone: Phone
-        lastUpdated(parsed: DateParsing): String!
+        lastUpdated(parsed: DateStringParsing): String!
+        practitioner: Practitioner
+    }
+
+    type Practitioner {
+        id: ID!
+        name: Name
+        education: Education
+    }
+
+    type Education {
+        degree: String
+        graduationDate(count: DateCount): String
+        university: String
     }
 
     type Name {
