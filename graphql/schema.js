@@ -2,6 +2,7 @@ const { gql } = require('apollo-server');
 
 const typeDefs = gql`
     scalar DateTime
+    directive @upper on FIELD_DEFINITION
 
     enum DateStringParsing {
         STRING
@@ -17,7 +18,7 @@ const typeDefs = gql`
         id: ID!
         name: Name
         gender: String
-        birthDate: DateTime
+        birthDate: String
         phone: Phone
         lastUpdated(parsed: DateStringParsing): String!
         practitioner: Practitioner
@@ -43,15 +44,15 @@ const typeDefs = gql`
     }
 
     type Phone {
-        work: String
-        home: String
+        work: String!
+        home: String!
     }
 
     type Query {
         """
         Get a patient by id
         """
-        patient(id: String!): Patient!
+        patient(id: String): Patient!
         """
         Get all patients
         """

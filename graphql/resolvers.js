@@ -17,6 +17,10 @@ const resolvers = {
         full: (patientData, { reverse }) => {
             const { first, last, suffix } = patientData;
 
+            if (!first || !last) {
+                return 'No practitioner';
+            }
+
             if (reverse) {
                 return `${last}, ${first}`;
             }

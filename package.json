@@ -16,6 +16,7 @@
         "apollo-server-koa": "^2.5.0",
         "axios": "^0.18.0",
         "graphql": "^14.3.0",
+        "graphql-directive-uppercase": "^1.0.0",
         "graphql-iso-date": "^3.6.1",
         "koa": "^2.7.0",
         "koa-bodyparser": "^4.2.1",

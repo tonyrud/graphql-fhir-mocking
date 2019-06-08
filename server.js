@@ -1,5 +1,8 @@
 const koa = require('koa');
-const { ApolloServer } = require('apollo-server-koa');
+const { defaultFieldResolver } = require('graphql');
+
+// const uppercaseDirective = require('graphql-directive-uppercase');
+const { ApolloServer, SchemaDirectiveVisitor } = require('apollo-server-koa');
 const playground = require('./graphql/playground');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
@@ -10,6 +13,19 @@ const app = new koa();
 
 const PORT = 3001;
 
+class UpperCaseDirective extends SchemaDirectiveVisitor {
+    visitFieldDefinition(field) {
+        const { resolve = defaultFieldResolver } = field;
+        field.resolve = async function(...args) {
+            const result = await resolve.apply(this, args);
+            if (typeof result === 'string') {
+                return result.toUpperCase();
+            }
+            return result;
+        };
+    }
+}
+
 const server = new ApolloServer({
     context: ({ ctx }) => ctx,
     tracing: true,
@@ -19,6 +35,9 @@ const server = new ApolloServer({
     dataSources: () => ({
         fhirAPI: new fhirAPI(),
     }),
+    schemaDirectives: {
+        upper: UpperCaseDirective,
+    },
 });
 
 server.applyMiddleware({

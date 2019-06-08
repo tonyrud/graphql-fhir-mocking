@@ -1,5 +1,9 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
+const mockPatient = require('../mocks/mockPatient');
+const mockPatients = require('../mocks/mockPatients');
+const mockPractitioner = require('../mocks/mockPractitioner');
 
+const realData = false;
 class fhirApi extends RESTDataSource {
     baseURL = 'http://test.fhir.org/r4/';
     queryParams = {
@@ -8,14 +12,30 @@ class fhirApi extends RESTDataSource {
     };
 
     async getPatient({ id }) {
-        const data = await this.get(`Patient/${id}`, this.queryParams);
-        const parsed = JSON.parse(data);
-        return this.patientMapper(parsed);
+        let parsed = mockPatient;
+        if (realData) {
+            console.log('using real patient data');
+            const data = await this.get(`Patient/${id}`, this.queryParams);
+            parsed = JSON.parse(data);
+        }
+        return this.constructor.patientMapper(parsed);
     }
 
     async getPractitioner({ practitionerId }) {
-        const data = await this.get(practitionerId, this.queryParams);
-        const { id, name, qualification } = JSON.parse(data);
+        let data = mockPractitioner;
+        if (!practitionerId) {
+            return {
+                name: {},
+            };
+        }
+
+        if (realData) {
+            console.log('using real practitioner data');
+            data = await this.get(practitionerId, this.queryParams);
+            data = JSON.parse(data);
+        }
+
+        const { id, name, qualification } = data;
 
         const degree = qualification && qualification[0].code.text;
         const graduationDate = qualification && qualification[0].period.start;
@@ -33,12 +53,17 @@ class fhirApi extends RESTDataSource {
     }
 
     async getPatients() {
-        const data = await this.get('Patient', this.queryParams);
-        const parsed = JSON.parse(data);
-        return parsed.entry.map(this.patientMapper);
+        let parsed = mockPatients;
+        if (realData) {
+            console.log('using real patients data');
+            const data = await this.get('Patient', this.queryParams);
+            parsed = JSON.parse(data);
+        }
+
+        return parsed.entry.map(this.constructor.patientMapper);
     }
 
-    patientMapper(patient) {
+    static patientMapper(patient) {
         const patientResource = patient.resource ? patient.resource : patient;
         const {
             id,
@@ -46,6 +71,7 @@ class fhirApi extends RESTDataSource {
             meta: { lastUpdated },
             name,
             telecom,
+            birthDate,
             generalPractitioner,
         } = patientResource;
 
@@ -60,17 +86,23 @@ class fhirApi extends RESTDataSource {
             generalPractitioner && generalPractitioner[0].reference;
 
         const workPhone = findNumber('work') || 'No business phone';
-        const homePhone = findNumber('home') || 'No home phone';
+        const homePhone = findNumber('home') || 'N/A';
+        const genderCheck = gender || 'unknown';
 
         return {
             id,
             practitionerId,
-            name: this.nameMapper(name),
+            name: {
+                last: name && name[0].family,
+                first: name && name[0].given[0],
+                suffix: name && name[0].suffix && name[0].suffix[0],
+            },
             phone: {
                 work: workPhone,
                 home: homePhone,
             },
-            gender,
+            gender: genderCheck,
+            birthDate,
             lastUpdated,
         };
     }
