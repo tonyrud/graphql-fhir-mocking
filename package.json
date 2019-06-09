@@ -1,16 +1,19 @@
 {
-    "name": "graphql-FHIR",
+    "name": "graphql-fhir",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon server.js"
+        "dev": "nodemon server.js",
+        "registry:check": "apollo service:check",
+        "registry:push": "apollo service:push"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "apollo": "^2.13.0",
         "apollo-datasource-rest": "^0.4.0",
         "apollo-server": "^2.5.0",
         "apollo-server-koa": "^2.5.0",
@@ -27,6 +30,7 @@
         "subscriptions-transport-ws": "^0.9.16"
     },
     "devDependencies": {
+        "graphql-tools": "^4.0.4",
         "nodemon": "^1.19.0"
     }
 }

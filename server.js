@@ -1,6 +1,5 @@
 const koa = require('koa');
 const { defaultFieldResolver } = require('graphql');
-const { SubscriptionServer } = require('subscriptions-transport-ws');
 require('dotenv').config();
 
 // const uppercaseDirective = require('graphql-directive-uppercase');
@@ -12,7 +11,6 @@ const fhirAPI = require('./graphql/fhirApi');
 const corsOptions = { credentials: true };
 
 const app = new koa();
-
 const PORT = 3001;
 
 class UpperCaseDirective extends SchemaDirectiveVisitor {
