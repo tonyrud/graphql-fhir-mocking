@@ -1,5 +1,7 @@
 const koa = require('koa');
 const { defaultFieldResolver } = require('graphql');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
+require('dotenv').config();
 
 // const uppercaseDirective = require('graphql-directive-uppercase');
 const { ApolloServer, SchemaDirectiveVisitor } = require('apollo-server-koa');
@@ -32,9 +34,13 @@ const server = new ApolloServer({
     playground,
     resolvers,
     typeDefs,
+    subscriptions: true,
     dataSources: () => ({
         fhirAPI: new fhirAPI(),
     }),
+    engine: {
+        apiKey: process.env.ENGINE_API_KEY,
+    },
     schemaDirectives: {
         upper: UpperCaseDirective,
     },
@@ -45,6 +51,8 @@ server.applyMiddleware({
     cors: corsOptions,
 });
 
-app.listen(PORT, () =>
+const httpServer = app.listen(PORT, () =>
     console.log(`Server ready at http://localhost:${PORT}${server.graphqlPath}`)
 );
+
+server.installSubscriptionHandlers(httpServer);

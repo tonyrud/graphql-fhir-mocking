@@ -15,13 +15,16 @@
         "apollo-server": "^2.5.0",
         "apollo-server-koa": "^2.5.0",
         "axios": "^0.18.0",
+        "dotenv": "^8.0.0",
         "graphql": "^14.3.0",
         "graphql-directive-uppercase": "^1.0.0",
         "graphql-iso-date": "^3.6.1",
+        "graphql-subscriptions": "^1.1.0",
         "koa": "^2.7.0",
         "koa-bodyparser": "^4.2.1",
         "koa-router": "^7.4.0",
-        "moment": "^2.24.0"
+        "moment": "^2.24.0",
+        "subscriptions-transport-ws": "^0.9.16"
     },
     "devDependencies": {
         "nodemon": "^1.19.0"

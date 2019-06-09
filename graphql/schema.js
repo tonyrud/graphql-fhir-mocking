@@ -48,6 +48,10 @@ const typeDefs = gql`
         home: String!
     }
 
+    type Subscription {
+        patientAdded: Patient
+    }
+
     type Query {
         """
         Get a patient by id
@@ -57,6 +61,11 @@ const typeDefs = gql`
         Get all patients
         """
         patients: [Patient]!
+    }
+
+    type Mutation {
+        addPatient(patientName: String!): Patient
+        changePatientName(patientName: String!): Patient
     }
 `;
 
