@@ -29,6 +29,7 @@ class UpperCaseDirective extends SchemaDirectiveVisitor {
 const server = new ApolloServer({
     context: ({ ctx }) => ctx,
     tracing: true,
+    introspection: true,
     playground,
     resolvers,
     typeDefs,

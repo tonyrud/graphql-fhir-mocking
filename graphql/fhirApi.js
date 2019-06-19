@@ -5,11 +5,14 @@ const mockPractitioner = require('../mocks/mockPractitioner');
 
 const realData = false;
 class fhirApi extends RESTDataSource {
-    baseURL = 'http://test.fhir.org/r4/';
-    queryParams = {
-        _format: 'json',
-        _pretty: true,
-    };
+    constructor() {
+        super();
+        this.baseURL = 'http://test.fhir.org/r4/';
+        this.queryParams = {
+            _format: 'json',
+            _pretty: true,
+        };
+    }
 
     async getPatient({ id }) {
         let parsed = mockPatient;
