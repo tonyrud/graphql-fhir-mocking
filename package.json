@@ -17,7 +17,7 @@
         "apollo-datasource-rest": "^0.4.0",
         "apollo-server": "^2.5.0",
         "apollo-server-koa": "^2.5.0",
-        "axios": "^0.18.0",
+        "axios": "^0.21.1",
         "dotenv": "^8.0.0",
         "graphql": "^14.3.0",
         "graphql-directive-uppercase": "^1.0.0",
